@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+</head>
+<body>
+
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <img src="logo.png">
+            My App
+        </a>
+    </div>
+</nav>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">Welcome to My App</h1>
+        <div class="field">
+            <label class="label">Search</label>
+            <div class="control">
+                <input id="search-input" class="input" type="text" placeholder="Enter search term...">
+            </div>
+        </div>
+        <div class="columns" id="results">
+            <!-- Search results will be displayed here -->
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    // When the user types in the search box, send a request to the API and display the results
+    $('#search-input').on('input', function() {
+        var searchTerm = $(this).val();
+        $.ajax({
+            url: '/api/qrcode/' + searchTerm,
+            method: 'GET',
+            success: function(results) {
+                // Clear the previous search results
+                $('#results').empty();
+                // Add the new search results to the page
+                results.forEach(function(result) {
+                    var html = '<div class="column">' +
+                        '<div class="card">' +
+                        '<div class="card-content">' +
+                        '<p class="title">' + result.title + '</p>' +
+                        '<p class="subtitle">' + result.description + '</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $('#results').append(html);
+                });
+            },
+            error: function() {
+                alert('An error occurred while searching. Please try again later.');
+            }
+        });
+    });
+</script>
+</body>
+</html>
